@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.graphics.Color;
 import android.graphics.Paint;
-
+import android.content.Intent;
+import android.app.Activity;
+import 	android.widget.Toast;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -43,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
           //  }
        // });
 
+
         radii = (EditText) findViewById(R.id.editRadius);
 
         petals = (EditText) findViewById(R.id.editPetals);
@@ -56,78 +59,97 @@ public class MainActivity extends AppCompatActivity {
             // @Override
             public void onClick(View view) {
 
-
-
-                 int PREF_W = 400;
-                 int PREF_H = PREF_W;
-                 double MAX = 100;
-                 double SCALE = 150.0;
-                 double DELTA_X = 200;
-                 double DELTA_Y = DELTA_X;
-                 //Color ROSE_COLOR = Color.green;
+                double radius1;
+                double petal1;
+                double MAX = 1000;
+                double SCALE = 0.5;
+                //double DELTA_X = 200;
+                //double DELTA_Y = DELTA_X;
+                //Color ROSE_COLOR = Color.green;
                 // Stroke ROSE_STROKE = new BasicStroke(8f);
                 // Path2D path = new Path2D.Double();
-                 double radius1 = Double.parseDouble(radii.getText().toString());
-                 double petal1 = Double.parseDouble(petals.getText().toString());
+                try {
 
-                    // Scanner rInput = new Scanner(System.in);
 
+                    radius1 = Double.parseDouble(radii.getText().toString());
+                    petal1 = Double.parseDouble(petals.getText().toString());
+
+                }
+                catch (NumberFormatException ex ) {
+                    Toast.makeText(getApplicationContext(), "Please Enter a Radius/Petal Number!", Toast.LENGTH_SHORT).show();
+                    return;
+
+                }
+
+                // Scanner rInput = new Scanner(System.in);
+                if (radii == null) {
+
+
+                }
+                else if (petals == null) {
+
+                }
+                else
+                {
+
+
+                    GraphView graph = (GraphView) findViewById(R.id.mainGraph);
+
+                    graph.removeAllSeries();
 
                     for (double i = 0; i < MAX; i++) {
                         // double rInput = Scanner.nextDouble();
 
                         double placeholder = 2;
                         double theta = i * 2 * Math.PI / MAX;
-                        if( petal1 % placeholder == 0)
-                        {
-                            double r =  radius1 * Math.cos(( petal1 ) * theta);
-                            double dX = SCALE * r * Math.cos(theta) + DELTA_X;
-                            double dY = SCALE * r * Math.sin(theta) + DELTA_Y;
-                            if (i == 0)
-                            {
-                                GraphView graph = (GraphView) findViewById(R.id.mainGraph);
-                                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                        new DataPoint(0, 1),
-                                        new DataPoint(1, 5),
-                                        new DataPoint(2, 3),
-                                        new DataPoint(3, 2),
-                                        new DataPoint(4, 6) });
-                            } else {
-                                GraphView graph = (GraphView) findViewById(R.id.mainGraph);
-                                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                        new DataPoint(0, 1),
-                                        new DataPoint(1, 5),
-                                        new DataPoint(2, 3),
-                                        new DataPoint(3, 2),
-                                        new DataPoint(4, 6) });
-                            }
-                        }
-                        else
-                        {
-                            double r =  radius1 * Math.cos(petal1 * theta);
-                            double dX = SCALE * r * Math.cos(theta) + DELTA_X;
-                            double dY = SCALE * r * Math.sin(theta) + DELTA_Y;
-                            if (i == 0)
-                            {
-                                GraphView graph = (GraphView) findViewById(R.id.mainGraph);
-                                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                        new DataPoint(0, 1),
-                                        new DataPoint(1, 5),
-                                        new DataPoint(2, 3),
-                                        new DataPoint(3, 2),
-                                        new DataPoint(4, 6) });
-                            }
-                            else
-                            {
-                                //path.lineTo(dX, dY);
-                                GraphView graph = (GraphView) findViewById(R.id.mainGraph);
-                                LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[] {
-                                        new DataPoint(0, 1),
-                                        new DataPoint(1, 5),
-                                        new DataPoint(2, 3),
-                                        new DataPoint(3, 2),
-                                        new DataPoint(4, 6) });
-                            }
+                        if (petal1 % placeholder == 0) {
+                            double r = radius1 * Math.cos((petal1) * theta);
+                            double dX = r * Math.cos(theta);
+                            double dY = r * Math.sin(theta);
+
+                            // set manual X bounds
+                            graph.getViewport().setXAxisBoundsManual(true);
+                            graph.getViewport().setMinX(-radius1);
+                            graph.getViewport().setMaxX(radius1);
+
+                            // set manual Y bounds
+                            graph.getViewport().setYAxisBoundsManual(true);
+                            graph.getViewport().setMinY(-radius1);
+                            graph.getViewport().setMaxY(radius1);
+
+
+                            PointsGraphSeries<DataPoint> series = new PointsGraphSeries<>(new DataPoint[]{
+                                    new DataPoint(dX, dY)});
+
+                            graph.addSeries(series);
+                            series.setColor(Color.RED);
+                            series.setShape(PointsGraphSeries.Shape.RECTANGLE);
+
+
+                        } else {
+                            double r = radius1 * Math.cos(petal1 * theta);
+                            double dX = r * Math.cos(theta);
+                            double dY = r * Math.sin(theta);
+
+
+                            // set manual X bounds
+                            graph.getViewport().setXAxisBoundsManual(true);
+                            graph.getViewport().setMinX(-radius1);
+                            graph.getViewport().setMaxX(radius1);
+
+                            // set manual Y bounds
+                            graph.getViewport().setYAxisBoundsManual(true);
+                            graph.getViewport().setMinY(-radius1);
+                            graph.getViewport().setMaxY(radius1);
+
+
+                            PointsGraphSeries<DataPoint> series = new PointsGraphSeries<>(new DataPoint[]{
+                                    new DataPoint(dX, dY)});
+                            graph.addSeries(series);
+                            series.setColor(Color.RED);
+                            series.setShape(PointsGraphSeries.Shape.RECTANGLE);
+
+
                         }
 
                     }
@@ -136,7 +158,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                 }
+
+            }
             });
+
+
                                     };
 
 
