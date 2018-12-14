@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=radius\ petal
+comment0.target=RosePanel(double,\ double)
+comment1.params=g
+comment1.target=void\ paintComponent(java.awt.Graphics)
+comment2.params=
+comment2.target=java.awt.Dimension\ getPreferredSize()
+comment3.params=
+comment3.target=double\ getPREF_W()
+comment4.params=PREF_W2
+comment4.target=void\ setPREF_W(double)
+numComments=5
